@@ -2,69 +2,14 @@
 """
 Functions for the velib main program
 """
-
-import json,urllib, os, numpy as np
 from matplotlib import pyplot as pl
-
+import json
 
 def json_local_loader(file_path):
     '''
     A simple json loader for a local file. Strings in Unicode format !
     '''
     return json.loads(next(open(file_path)))
-
-
-def fetch_statinfo(station,url,key):
-    '''
-    Fetch the information of a station and append it to a data list.
-    Fetch the following information :
-    - Rounded epoch time of last update
-    - Available bike stands
-    - Available bikes
-    '''
-    opener =  urllib.FancyURLopener()
-    fet = json.loads(opener.open(url+str(station)+key).read())
-    try:
-        data = (fet['last_update']/1000,fet['available_bike_stands'],fet['available_bikes'])
-    except KeyError:
-        print('KeyError during attempt to fetch station '+str(station))
-    else:
-        print(str(station)+' Done')
-        return data
-        
-
-def create_dir(path):
-    '''
-    Just create a dir and manage OSError
-    '''
-    try:
-        os.makedirs(path)
-    except OSError:
-        pass
-
-
-def station_data_saver(station,data):
-    '''
-    A function to save data of a station.
-    Checks if the right leaf directory exists, create it if not, compare data and save only if fresher.
-    '''
-    absolute_path_to_data_folder = '/home/clement/Documents/ProgPython/Homemade/Velib/data/'
-    if data == None:
-        return
-    try:
-        station_file = np.loadtxt(absolute_path_to_data_folder+str(station),delimiter = ',',dtype = 'int')
-        old_data = station_file.ravel()[-3]
-    except IOError:
-        create_dir(absolute_path_to_data_folder)
-    station_file = open(absolute_path_to_data_folder+str(station),'a')
-    try:
-        if old_data == data[0]:
-            return
-        else:
-            station_file.write('{0},{1},{2}'.format(str(data[0]),str(data[1]),str(data[2]))+'\n')
-    except NameError:
-        station_file.write('{0},{1},{2}'.format(str(data[0]),str(data[1]),str(data[2]))+'\n')
-
         
 def mk_interval_hist(station_numbers,station_data):
     intervals = dict()
