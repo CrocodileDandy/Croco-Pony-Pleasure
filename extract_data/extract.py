@@ -13,7 +13,7 @@ def json_local_loader(file_path):
     except:
     	return 'The station infos are not in the indicated directory!'
 
-	return data
+    return data
 
 def fetch_statinfo(station,url,key):
     '''
@@ -24,7 +24,7 @@ def fetch_statinfo(station,url,key):
     - Available bikes
     '''
     opener =  urllib.FancyURLopener()
-    fet = json.loads(opener.open(url+str(station)+key).read())
+    fet = json.loads(opener.open(url+str(station)+'?contract=Paris&apiKey='+str(key)).read())
     try:
         data = (fet['last_update']/1000,fet['available_bike_stands'],fet['available_bikes'])
     except KeyError:
@@ -53,7 +53,7 @@ def station_data_saver(station,data,data_dir):
     if data == None:
         return
     try:
-        station_file = np.loadtxt(data_dir+str(station),delimiter = ',',dtype = 'int')
+        station_file = np.loadtxt(data_dir+str(station)+'.csv',delimiter = ',',dtype = 'int')
         old_data = station_file.ravel()[-3]
     except IOError:
         create_dir(data_dir)
@@ -78,6 +78,8 @@ stations_file=''
 url = 'https://api.jcdecaux.com/vls/v1/stations/'
 key = '' #Insert your api key here
 paris = json_local_loader(stations_file)
+
+print paris
 
 station_numbers = [paris[i]['number'] for i in range(len(paris))]
 for station in station_numbers:
