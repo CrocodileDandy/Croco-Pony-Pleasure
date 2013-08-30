@@ -54,8 +54,14 @@ for f in list_files:
         pass
 
 print min(lengths)
+
+
+
 '''
 IMPORT PARIS MAP
+
+Plotting the whole map takes A LOT of time... Maybe we should restrict to a few roads? 
+Change the shapefile.
 '''
 shapefile = osgeo.ogr.Open("ile-de-france_highway.shp")
 layer = shapefile.GetLayer(0)
@@ -65,21 +71,26 @@ print '\nImport roads in wkt format...'
 roads=[]
 #import the polygons in wkt
 for i in range(layer.GetFeatureCount()):
-    feature=layer.GetFeature(i)
+    feature = layer.GetFeature(i)
     geometry = feature.GetGeometryRef()
     wkt = geometry.ExportToWkt()
     roads.append(shapely.wkt.loads(wkt))
 print 'Done.'
 
+
+
 '''
 PLOT EVERYTHING
-'''
 
+'''
 plt.figure()
 ax=plt.subplot(111)
+
+# Start by plotting the underlying road network
 for r in roads:
     plot_line(ax,r)
 
+# Now plot the Voronoi cells. Color gives the status of the station
 for c in cells:
     try:
         Ndispo=data[cells[c]['info']][2][5]
