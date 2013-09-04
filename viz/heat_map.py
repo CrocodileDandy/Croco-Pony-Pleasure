@@ -1,11 +1,12 @@
 from __future__ import division
-from matplotlib import pylab as plt
 import csv
-import voronoi_poly
-from descartes import PolygonPatch
 import os
 import osgeo.ogr
 import shapely.wkt
+from matplotlib import pylab as plt
+from descartes import PolygonPatch
+import voronoi_poly
+
 
 def plot_line(ax,ob):
     x,y=ob.xy
