@@ -89,7 +89,7 @@ PLOT THE HEAT MAP FOR EVERY DATE
 for i,d in enumerate(dates):
 	print 'Ploting configuration %s/%s'%(i,len(dates))
 
-	plt.figure()
+	fig=plt.figure()
 	ax=plt.subplot(111)
 
 	# Start by plotting the underlying road network
@@ -100,8 +100,9 @@ for i,d in enumerate(dates):
 	for c in cells:
 	    try:
 	        Ndispo=bikes[int(cells[c]['info'])][d]
+	        Nslot=slots[int(cells[c]['info'])][d]
 	        Ntot=slots[int(cells[c]['info'])][d]+bikes[int(cells[c]['info'])][d]
-	        r_vdispo=Ndispo/Ntot
+	        r_vdispo=Nslot/Ntot
 	        # Green -> taux=1 & White -> taux=0
 	        patch = PolygonPatch(cells[c]['obj_polygon'], fc=plt.get_cmap('Greens')(r_vdispo), ec=plt.get_cmap('Greens')(r_vdispo), alpha=0.8, zorder=1)
 	        ax.add_patch(patch)
@@ -116,16 +117,6 @@ for i,d in enumerate(dates):
 	frame1.axes.get_xaxis().set_ticks([])
 	frame1.axes.get_yaxis().set_ticks([])
 	plt.xlabel(r'%s'%d,fontsize=10)
-	plt.title(r'$Bike\, availability$',fontsize=25)    
-	plt.savefig('test_vid/%03d.png'%i)
-
-
-
-
-bikes[19031].plot()
-# pouet['bikes'].plot()
-# data[19031]['bikes'].plot()
-# data[19021]['bikes'].plot()
-# data[19011]['bikes'].plot()
-
-plt.show()
+	plt.title(r'$Slot\, availability$',fontsize=25)    
+	plt.savefig('test_vid/slots_availability/%03d.png'%i)
+	plt.close(fig)
